@@ -63,8 +63,10 @@ export default function EditUserForm(props) {
         notification['error']({
           message: 'Las contraseñas tienen que ser iguales',
         })
+        return
+      } else {
+        delete userUpdate.repeatPassword
       }
-      return
     }
 
     if (!userUpdate.name || !userUpdate.lastname || !userUpdate.email) {
@@ -81,6 +83,7 @@ export default function EditUserForm(props) {
           notification['success']({
             message: result.message,
           })
+
           setIsVisibleModal(false)
           setReloadUsers(true)
         })
