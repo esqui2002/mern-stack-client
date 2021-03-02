@@ -29,7 +29,7 @@ export function updateMenuApi(token, menuId, data) {
 
   return fetch(url, params)
     .then((res) => {
-      res.json()
+      return res.json()
     })
     .then((result) => {
       return result.message
@@ -51,6 +51,51 @@ export function activateMenuApi(token, menuId, status) {
     body: JSON.stringify({ active: status }),
   }
 
+  return fetch(url, params)
+    .then((res) => {
+      return res.json()
+    })
+    .then((result) => {
+      return result.message
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+}
+
+export function addMenuApi(token, menu) {
+  const url = `${basePath}/${apiVersion}/add-menu`
+  const params = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token,
+    },
+    body: JSON.stringify(menu),
+  }
+
+  return fetch(url, params)
+    .then((res) => {
+      return res.json()
+    })
+    .then((result) => {
+      return result.message
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+}
+
+export function deleteMenuApi(token, menuId) {
+  const url = `${basePath}/${apiVersion}/delete-menu/${menuId}`
+
+  const params = {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token,
+    },
+  }
   return fetch(url, params)
     .then((res) => {
       return res.json()

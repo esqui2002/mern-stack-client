@@ -9,10 +9,16 @@ import {
 } from 'antd'
 import Modal from '../../../Modal'
 import DragSortableList from 'react-drag-sortable'
-import { updateMenuApi, activateMenuApi } from '../../../../api/menu'
+import {
+  updateMenuApi,
+  activateMenuApi,
+  deleteMenuApi,
+} from '../../../../api/menu'
 import { getAccessTokenApi } from '../../../../api/auth'
 
 import './MenuWebList.scss'
+import AddMenuWebForm from '../AddMenuWebForm'
+import EditMenuWebForm from '../EditMenuWebForm'
 
 const { confirm } = ModalAntd
 
@@ -28,11 +34,19 @@ export default function MenuWebList(props) {
 
     menu.forEach((item) => {
       listItemsArray.push({
-        content: <MenuItem item={item} activateMenu={activateMenu} />,
+        content: (
+          <MenuItem
+            item={item}
+            activateMenu={activateMenu}
+            editMenuWebModal={editMenuWebModal}
+            deleteMenu={deleteMenu}
+          />
+        ),
       })
     })
 
     setListItems(listItemsArray)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [menu])
 
   const activateMenu = (menu, status) => {
@@ -52,20 +66,76 @@ export default function MenuWebList(props) {
     })
   }
 
+  const addMenuWebModal = () => {
+    setIsVisibleModal(true)
+    setModalTitle('Creando nuevo menú')
+    setModalContent(
+      <AddMenuWebForm
+        setIsVisibleModal={setIsVisibleModal}
+        setReloadMenuWeb={setReloadMenuWeb}
+      />
+    )
+  }
+
+  const deleteMenu = (menu) => {
+    const accessToken = getAccessTokenApi()
+
+    confirm({
+      title: 'Eliminando menu',
+      content: `¿Estas seguro de que quieres eliminar el menu ${menu.title}?`,
+      okText: 'Eliminar',
+      okType: 'danger',
+      cancelText: 'Cancelar',
+      onOk() {
+        deleteMenuApi(accessToken, menu._id)
+          .then((response) => {
+            notification['success']({ message: response })
+            setReloadMenuWeb(true)
+          })
+          .catch(() => {
+            notification['error']({
+              message: 'Error del servidor, intentelo mas tarde',
+            })
+          })
+      },
+    })
+  }
+
+  const editMenuWebModal = (menu) => {
+    setIsVisibleModal(true)
+    setModalTitle(`Editando menu: ${menu.title}`)
+    setModalContent(
+      <EditMenuWebForm
+        setIsVisibleModal={setIsVisibleModal}
+        setReloadMenuWeb={setReloadMenuWeb}
+        menu={menu}
+      />
+    )
+  }
+
   return (
     <div className="menu-web-list">
       <div className="menu-web-list__header">
-        <Button type="primary">Menu menú</Button>
+        <Button type="primary" onClick={addMenuWebModal}>
+          Crear menú
+        </Button>
       </div>
       <div className="menu-web-list__items">
         <DragSortableList items={listItems} onSort={onSort} type="vertical" />
       </div>
+      <Modal
+        title={modalTitle}
+        isVisible={isVisibleModal}
+        setIsVisible={setIsVisibleModal}
+      >
+        {modalContent}
+      </Modal>
     </div>
   )
 }
 
 function MenuItem(props) {
-  const { item, activateMenu } = props
+  const { item, activateMenu, editMenuWebModal, deleteMenu } = props
 
   return (
     <List.Item
@@ -74,10 +144,10 @@ function MenuItem(props) {
           defaultChecked={item.active}
           onChange={(e) => activateMenu(item, e)}
         />,
-        <Button type="primary">
+        <Button type="primary" onClick={() => editMenuWebModal(item)}>
           <Icon type="edit" />
         </Button>,
-        <Button type="danger">
+        <Button type="danger" onClick={() => deleteMenu(item)}>
           <Icon type="delete" />
         </Button>,
       ]}
