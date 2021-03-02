@@ -1,38 +1,38 @@
 import React from 'react'
-import { Route, Switch } from 'react-router-dom';
-import { Layout } from "antd";
+import { Route, Switch } from 'react-router-dom'
+import { Col, Layout, Row } from 'antd'
 
-import "./LayoutBasic.scss";
+import './LayoutBasic.scss'
+import MenuTop from '../components/Web/MenuTop'
 
 export default function LayoutBasic(props) {
-    const { routes } = props;
-    const { Content, Footer } = Layout;
-    console.log(props);
+  const { routes } = props
+  const { Footer } = Layout
 
-    return (
-        <Layout>
-            <h2>Menu...</h2>
-            <Layout>
-                <Content>
-                    <LoadRoutes routes={routes} />
-                </Content>
-                <Footer>Alberto Esquitino Pascual</Footer>
-            </Layout>
-        </Layout>
-    )
+  return (
+    <Row>
+      <Col lg={4} />
+      <Col lg={16}>
+        <MenuTop />
+        <LoadRoutes routes={routes} />
+        <Footer>Alberto Esquitino Pascual</Footer>
+      </Col>
+      <Col lg={4} />
+    </Row>
+  )
 }
 
 function LoadRoutes({ routes }) {
-    return (
-        <Switch>
-            {routes.map((route, index) => (
-                <Route
-                    key={index}
-                    path={route.path}
-                    exact={route.exact}
-                    component={route.component}
-                />
-            ))}
-        </Switch>
-    ) 
+  return (
+    <Switch>
+      {routes.map((route, index) => (
+        <Route
+          key={index}
+          path={route.path}
+          exact={route.exact}
+          component={route.component}
+        />
+      ))}
+    </Switch>
+  )
 }
