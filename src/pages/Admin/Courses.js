@@ -1,9 +1,21 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { getCoursesApi } from '../../api/course'
+import CoursesList from '../../components/Admin/Courses/CoursesList'
 
 export default function Courses() {
+  const [courses, setCourses] = useState([])
+  const [reloadCourses, setReloadCourses] = useState(false)
+
+  useEffect(() => {
+    getCoursesApi().then((response) => {
+      setCourses(response.courses)
+    })
+    setReloadCourses(false)
+  }, [reloadCourses])
+
   return (
     <div className="courses">
-      <h1>Administrar Courses</h1>
+      <CoursesList courses={courses} setReloadCourses={setReloadCourses} />
     </div>
   )
 }
