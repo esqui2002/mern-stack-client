@@ -32,3 +32,73 @@ export function getCourseDataUdemyApi(id) {
       return err
     })
 }
+
+export function deleteCourseApi(token, id) {
+  const url = `${basePath}/${apiVersion}/delete-course/${id}`
+
+  const params = {
+    method: 'DELETE',
+    headers: {
+      Authorization: token,
+    },
+  }
+
+  return fetch(url, params)
+    .then((res) => {
+      return res.json()
+    })
+    .then((result) => {
+      return result
+    })
+    .catch((err) => {
+      return err
+    })
+}
+
+export function addCourseApi(token, course) {
+  const url = `${basePath}/${apiVersion}/add-course`
+
+  const params = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token,
+    },
+    body: JSON.stringify(course),
+  }
+
+  return fetch(url, params)
+    .then((res) => {
+      return res.json()
+    })
+    .then((result) => {
+      return result
+    })
+    .catch((err) => {
+      return err
+    })
+}
+
+export function updateCourseApi(token, id, data) {
+  const url = `${basePath}/${apiVersion}/update-course/${id}`
+
+  const params = {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token,
+    },
+    body: JSON.stringify(data),
+  }
+
+  return fetch(url, params)
+    .then((res) => {
+      return res.json()
+    })
+    .then((result) => {
+      return result
+    })
+    .catch((err) => {
+      return err
+    })
+}
