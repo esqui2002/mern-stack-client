@@ -2,7 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { Button, Icon, List, Modal as ModalAntd, notification } from 'antd'
 import DragSortableList from 'react-drag-sortable'
 import Modal from '../../../Modal'
-import { deleteCourseApi, getCourseDataUdemyApi } from '../../../../api/course'
+import {
+  deleteCourseApi,
+  getCourseDataUdemyApi,
+  updateCourseApi,
+} from '../../../../api/course'
 import { getAccessTokenApi } from '../../../../api/auth'
 import AddEditCourseForm from '../AddEditCourseForm'
 
@@ -37,7 +41,14 @@ export default function CoursesList(props) {
   }, [courses])
 
   const onSort = (sortedList, dropEvent) => {
-    console.log(sortedList)
+    const accessToken = getAccessTokenApi()
+    sortedList.forEach((item) => {
+      const { _id } = item.content.props.course
+
+      const order = item.rank
+
+      updateCourseApi(accessToken, _id, { order })
+    })
   }
 
   const addCourseModal = () => {
