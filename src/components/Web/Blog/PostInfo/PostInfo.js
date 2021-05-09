@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import 'moment/locale/es'
-
+import { Helmet } from 'react-helmet'
 import './PostInfo.scss'
 import { getPostApi } from '../../../../api/post'
 import { notification, Spin } from 'antd'
@@ -32,15 +32,20 @@ export default function PostInfo(props) {
   }
 
   return (
-    <div className="post-info">
-      <h1 className="post-info__title">{postInfo.title}</h1>
-      <div className="post-info__creation-date">
-        {moment(postInfo.date).locale('es').format('LL')}
+    <>
+      <Helmet>
+        <title>{postInfo.title} | Agustin Navarro Galdon</title>
+      </Helmet>
+      <div className="post-info">
+        <h1 className="post-info__title">{postInfo.title}</h1>
+        <div className="post-info__creation-date">
+          {moment(postInfo.date).locale('es').format('LL')}
+        </div>
+        <div
+          className="post-info__description"
+          dangerouslySetInnerHTML={{ __html: postInfo.description }}
+        />
       </div>
-      <div
-        className="post-info__description"
-        dangerouslySetInnerHTML={{ __html: postInfo.description }}
-      />
-    </div>
+    </>
   )
 }

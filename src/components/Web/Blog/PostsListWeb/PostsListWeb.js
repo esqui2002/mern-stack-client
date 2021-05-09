@@ -7,6 +7,7 @@ import { getPostsApi } from '../../../../api/post'
 import { List, notification, Pagination, Spin } from 'antd'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet'
 
 export default function PostsListWeb(props) {
   const { location, history } = props
@@ -33,14 +34,19 @@ export default function PostsListWeb(props) {
     )
   }
   return (
-    <div className="posts-list-web">
-      <h1>Blog</h1>
-      <List
-        dataSource={posts.docs}
-        renderItem={(post) => <Post post={post} />}
-      />
-      <Pagination posts={posts} location={location} history={history} />
-    </div>
+    <>
+      <Helmet>
+        <title>Blog | Agustin Navarro Galdon</title>
+      </Helmet>
+      <div className="posts-list-web">
+        <h1>Blog</h1>
+        <List
+          dataSource={posts.docs}
+          renderItem={(post) => <Post post={post} />}
+        />
+        <Pagination posts={posts} location={location} history={history} />
+      </div>
+    </>
   )
 }
 
